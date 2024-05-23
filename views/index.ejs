@@ -36,7 +36,7 @@
   </style>
   <body>
     <form
-      action="/"
+      action="/users/"
       method="post"
       class="col-11 col-md-8 col-lg-5 mx-auto card bg-light shadow border-0 p-2 mt-5"
     >
@@ -87,10 +87,10 @@
         <td><%= user.email %></td>
         <td><%= user.password %></td>
         <td class="d-flex align-items-center gap-2">
-          <form action="/editUser/<%= user._id%>" method="post">
+          <form action="/users/editUser/<%= user._id%>" method="post">
             <button type="submit" class="btn btn-success">Edit</button>
           </form>
-          <form action="/delete/<%= user._id %>" method="post">
+          <form action="/users/delete/<%= user._id %>" method="post">
             <button type="submit" class="btn btn-danger">Del</button>
           </form>
         </td>

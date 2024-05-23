@@ -1,6 +1,9 @@
 const express = require("express");
 const ejs = require("ejs");
+const { connectToDB } = require("./database/database")
 const mongoose = require("mongoose");
+const {userRoutes} = require("./routes/userRoutes")
+
 
 
 const app = express();
@@ -8,96 +11,8 @@ app.set({ viewEngine: "ejs" });
 app.use(express.urlencoded({ extended: "true" }));
 
 
-const connectionString = 'mongodb+srv://nobelium24:oluwatobi@cluster0.1sfkfgv.mongodb.net/testNodeClass?retryWrites=true&w=majority';
+app.use("/users", userRoutes)
 
-const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: true, trim: true },
-  lastName: { type: String, required: true, trim: true },
-  email: { type: String, required: true, trim: true, unique: true },
-  password: { type: String, required: true, trim: true }
-})
-
-const userModel = mongoose.models.user_tbs || mongoose.model("user_tbs", userSchema)
-
-
-app.get("/", async (req, res) => {
-  try {
-    const AllUsers = await userModel.find({});
-    console.log(AllUsers)
-    res.render("index.ejs", { AllUsers })
-  } catch (error) {
-    console.log(error)
-  }
-})
-
-app.post("/", async (req, res) => {
-  try {
-    const { firstName, lastName, email, password } = req.body;
-    const newUser = {
-      firstName,
-      lastName,
-      email,
-      password
-    };
-    // const user = userModel(newUser);
-    // await user.save();
-
-    const user = await userModel.create(newUser);
-    res.redirect("/")
-  } catch (error) {
-    console.log(error)
-  }
-})
-
-app.post("/editUser/:id", async (req, res) => {
-  try {
-    const { id } = req.params
-    const user = await userModel.findById({ _id: id });
-    console.log(user);
-    res.render("edit.ejs", { getUser: user })
-  } catch (error) {
-    console.log(error)
-  }
-})
-
-app.post("/update/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const {firstName, lastName, email, password} = req.body;
-    const updatedUser = {
-      firstName,
-      lastName,
-      email,
-      password
-    };
-    console.log(updatedUser, 33)
-    const update = await userModel.findByIdAndUpdate({_id:id}, updatedUser);
-    console.log(update)
-    res.redirect("/")
-  } catch (error) {
-    console.log(error)
-  }
-})
-
-app.post("/delete/:id", async(req, res)=>{
-  try {
-    const {id} = req.params;
-    await userModel.deleteOne({_id:id});
-    res.redirect("/")
-  } catch (error) {
-    console.log(error)
-  }
-})
-
-
-const connectToDB = async () => {
-  try {
-    await mongoose.connect(connectionString);
-    console.log("DB connected");
-  } catch (error) {
-    console.log(`An error occurred: ${error}`);
-  }
-}
 
 app.listen(5200, () => {
   connectToDB()
