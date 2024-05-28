@@ -3,11 +3,14 @@ const ejs = require("ejs");
 const { connectToDB } = require("./database/database")
 const mongoose = require("mongoose");
 const {userRoutes} = require("./routes/userRoutes")
+const cors = require("cors");
 
 
 
 const app = express();
+app.use(cors({ origin: "*" }));
 app.set({ viewEngine: "ejs" });
+app.use(express.json());
 app.use(express.urlencoded({ extended: "true" }));
 
 

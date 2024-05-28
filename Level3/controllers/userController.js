@@ -5,7 +5,7 @@ const viewUsers = async (req, res) => {
     try {
         const AllUsers = await userModel.find({});
         console.log(AllUsers)
-        res.render("index.ejs", { AllUsers })
+        res.status(200).send(AllUsers);
     } catch (error) {
         console.log(error)
     }
@@ -14,6 +14,7 @@ const viewUsers = async (req, res) => {
 const createNewUser = async (req, res) => {
     try {
         const { firstName, lastName, email, password } = req.body;
+        console.log(req.body)
         const newUser = {
             firstName,
             lastName,
@@ -24,7 +25,7 @@ const createNewUser = async (req, res) => {
         // await user.save();
 
         const user = await userModel.create(newUser);
-        res.redirect("/users")
+        res.status(201).send({message:"User created successfully", user})
     } catch (error) {
         console.log(error)
     }
@@ -35,7 +36,7 @@ const editUser = async (req, res) => {
         const { id } = req.params
         const user = await userModel.findById({ _id: id });
         console.log(user);
-        res.render("edit.ejs", { getUser: user })
+        res.status(200).send(user);
     } catch (error) {
         console.log(error)
     }
@@ -54,7 +55,7 @@ const updateUser = async (req, res) => {
         console.log(updatedUser, 33)
         const update = await userModel.findByIdAndUpdate({ _id: id }, updatedUser);
         console.log(update)
-        res.redirect("/users")
+        res.status(200).send({message:"User details has been updated", update})
     } catch (error) {
         console.log(error)
     }
@@ -64,7 +65,7 @@ const deleteUser = async (req, res) => {
     try {
         const { id } = req.params;
         await userModel.deleteOne({ _id: id });
-        res.redirect("/users")
+        res.status(204)
     } catch (error) {
         console.log(error)
     }
