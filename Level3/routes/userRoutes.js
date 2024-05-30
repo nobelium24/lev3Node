@@ -7,6 +7,6 @@ userRoutes.get("/viewUsers", viewUsers);
 userRoutes.post("/createUser", createNewUser);
 userRoutes.get("/editUser/:id", editUser);
 userRoutes.post("/update/:id", updateUser);
-userRoutes.post("/delete/:id", deleteUser);
+userRoutes.delete("/delete/:id", deleteUser);
 
 module.exports = {userRoutes};

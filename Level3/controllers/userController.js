@@ -1,19 +1,23 @@
 const userModel = require("../models/userModel");
 
-
+//Returns all the users in the table
 const viewUsers = async (req, res) => {
     try {
         const AllUsers = await userModel.find({});
         console.log(AllUsers)
         res.status(200).send(AllUsers);
     } catch (error) {
-        console.log(error)
+        return res.status(500).send({message:"An error occurred", error})
     }
 }
 
+//Creates a new user in the user table
 const createNewUser = async (req, res) => {
     try {
         const { firstName, lastName, email, password } = req.body;
+        const verifyUser = await userModel.findOne({email:email});
+        if(verifyUser) return res.status(400).send({message:"User already exist"});
+
         console.log(req.body)
         const newUser = {
             firstName,
@@ -25,12 +29,13 @@ const createNewUser = async (req, res) => {
         // await user.save();
 
         const user = await userModel.create(newUser);
-        res.status(201).send({message:"User created successfully", user})
+        return res.status(201).send({message:"User created successfully", user})
     } catch (error) {
-        console.log(error)
+        return res.status(500).send({message:"An error occurred", error})
     }
 }
 
+//Fetches and returns the details of the user to be edited
 const editUser = async (req, res) => {
     try {
         const { id } = req.params
@@ -38,10 +43,11 @@ const editUser = async (req, res) => {
         console.log(user);
         res.status(200).send(user);
     } catch (error) {
-        console.log(error)
+        return res.status(500).send({message:"An error occurred", error})
     }
 }
 
+//Edits the details of a user
 const updateUser = async (req, res) => {
     try {
         const { id } = req.params;
@@ -57,17 +63,18 @@ const updateUser = async (req, res) => {
         console.log(update)
         res.status(200).send({message:"User details has been updated", update})
     } catch (error) {
-        console.log(error)
+        return res.status(500).send({message:"An error occurred", error})
     }
 }
 
+//Deletes a user from the user table
 const deleteUser = async (req, res) => {
     try {
         const { id } = req.params;
         await userModel.deleteOne({ _id: id });
-        res.status(204)
+        res.status(200).send({message:"User has been deleted"})
     } catch (error) {
-        console.log(error)
+        return res.status(500).send({message:"An error occurred", error})
     }
 }
 
