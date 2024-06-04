@@ -10,6 +10,9 @@ const LandingPage = () => {
     const editUser = "http://localhost:5200/users/editUser";
     const deleteUser = "http://localhost:5200/users/delete";
 
+    const verifyToken = "http://localhost:5200/users/verifyToken";
+
+
     const [users, setUsers] = useState([]);
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -27,7 +30,30 @@ const LandingPage = () => {
         }
     }
 
+
+    const verifyTokenFunction = async () => {
+        const token = localStorage.getItem("userToken");
+        if (token === null) {
+            alert("Unauthorized");
+            navigate('/login')
+        } else {
+            try {
+                const response = await axios.get(verifyToken, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                console.log(response);
+            } catch (error) {
+                console.log(error);
+                alert("Unauthorized");
+                navigate("/login");
+            }
+        }
+    }
+
     useEffect(() => {
+        verifyTokenFunction();
         getUsers();
     }, [])
 

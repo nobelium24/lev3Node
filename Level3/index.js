@@ -2,7 +2,7 @@ const express = require("express");
 const ejs = require("ejs");
 const { connectToDB } = require("./database/database")
 const mongoose = require("mongoose");
-const {userRoutes} = require("./routes/userRoutes")
+const { userRoutes } = require("./routes/userRoutes")
 const cors = require("cors");
 
 
@@ -15,6 +15,8 @@ app.use(express.urlencoded({ extended: "true" }));
 
 
 app.use("/users", userRoutes)
+
+
 
 
 app.listen(5200, () => {
