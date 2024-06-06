@@ -1,17 +1,20 @@
 const {Router} = require("express");
 const {
     viewUsers, createNewUser, editUser, 
-    updateUser, deleteUser, loginUser, verifyUserToken
+    updateUser, deleteUser, loginUser,
 } = require("../controllers/userController")
+const validate = require("../middlewares/validator");
+const {userValidationSchema} = require("../middlewares/userValidation")
+const verifyUserToken = require("../middlewares/tokenValidator");
 
 const userRoutes = Router();
 
-userRoutes.get("/viewUsers", viewUsers);
+userRoutes.get("/viewUsers", verifyUserToken, viewUsers);
 
 
-userRoutes.post("/createUser", createNewUser);
+userRoutes.post("/createUser", validate(userValidationSchema), createNewUser);
 userRoutes.post("/login", loginUser);
-userRoutes.get("/verifyToken", verifyUserToken);
+// userRoutes.get("/verifyToken", verifyUserToken);
 
 userRoutes.get("/editUser/:id", editUser);
 userRoutes.post("/update/:id", updateUser);

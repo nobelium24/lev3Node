@@ -4,6 +4,8 @@ const { createToken, verifyToken } = require("../services/sessionService")
 //Returns all the users in the table
 const viewUsers = async (req, res) => {
     try {
+        const user = req.user;
+        console.log(user)
         const AllUsers = await userModel.find({});
         console.log(AllUsers)
         res.status(200).send(AllUsers);
@@ -48,21 +50,6 @@ const loginUser = async (req, res) => {
         const token = createToken(email);
 
         return res.status(200).send({ message: "Login successful", token })
-    } catch (error) {
-        return res.status(500).send({ message: "An error occurred", error })
-    }
-}
-
-const verifyUserToken = async (req, res) => {
-    try {
-        const userToken = req.headers.authorization;
-        const token = userToken.split(" ")[1];
-        const decodedToken = verifyToken(token);
-        console.log(decodedToken, 66);
-        const email  = decodedToken.email;
-        const user = await userModel.findOne({ email: email });
-        if (!user) return res.status(401).send({ message: "UNAUTHORIZED" });
-        return res.status(200).send({ message: "Token verified", user })
     } catch (error) {
         return res.status(500).send({ message: "An error occurred", error })
     }
@@ -113,6 +100,6 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = { viewUsers, createNewUser, editUser, updateUser, deleteUser, loginUser, verifyUserToken };
+module.exports = { viewUsers, createNewUser, editUser, updateUser, deleteUser, loginUser };
 
 
