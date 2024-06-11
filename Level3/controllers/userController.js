@@ -1,6 +1,7 @@
 const userModel = require("../models/userModel");
 const argon2 = require('argon2');
 const { createToken, verifyToken } = require("../services/sessionService")
+const {sendWelcomeMail} = require('../services/mailerService')
 //Returns all the users in the table
 const viewUsers = async (req, res) => {
     try {
@@ -32,8 +33,10 @@ const createNewUser = async (req, res) => {
         // await user.save();
 
         const user = await userModel.create(newUser);
+        await sendWelcomeMail(firstName, email);
         return res.status(201).send({ message: "User created successfully", user })
     } catch (error) {
+        console.log(error)
         return res.status(500).send({ message: "An error occurred", error })
     }
 }
