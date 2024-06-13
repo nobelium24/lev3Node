@@ -4,17 +4,19 @@ const { connectToDB } = require("./database/database")
 const mongoose = require("mongoose");
 const { userRoutes } = require("./routes/userRoutes")
 const cors = require("cors");
+const imageRouter = require("./routes/imageRoute");
 
 
 
 const app = express();
 app.use(cors({ origin: "*" }));
 app.set({ viewEngine: "ejs" });
-app.use(express.json());
-app.use(express.urlencoded({ extended: "true" }));
+app.use(express.json({limit:"200mb"}));
+app.use(express.urlencoded({ extended: "true", limit:"200mb" }));
 
 
 app.use("/users", userRoutes)
+app.use("/images", imageRouter)
 
 
 

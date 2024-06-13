@@ -3,6 +3,7 @@ import LandingPage from './pages/landingPage'
 import Edit from './pages/edit'
 import Signup from './pages/signup'
 import Login from './pages/login'
+import { ImageUpload } from './pages/imageUpload'
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
         <Route path='/edit' element={<Edit />} />
         <Route path='/signup' element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path='/upload' element={<ImageUpload />} />
       </Routes>
     </BrowserRouter>
   )
