@@ -4,6 +4,7 @@ import Edit from './pages/edit'
 import Signup from './pages/signup'
 import Login from './pages/login'
 import { ImageUpload } from './pages/imageUpload'
+import WebSocket from './pages/webSocket'
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path='/upload' element={<ImageUpload />} />
+        <Route path='/socket' element = {<WebSocket />} />
       </Routes>
     </BrowserRouter>
   )

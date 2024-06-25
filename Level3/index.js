@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const { userRoutes } = require("./routes/userRoutes")
 const cors = require("cors");
 const imageRouter = require("./routes/imageRoute");
+const socketIo = require("socket.io");
 
 
 
@@ -21,10 +22,28 @@ app.use("/images", imageRouter)
 
 
 
-app.listen(5200, () => {
-  connectToDB()
+const server = app.listen(5200, () => {
+  // connectToDB()
   console.log("App is running on port 5200");
 });
+
+const io = new socketIo.Server(server, {
+  cors:{
+    origin:"*"
+  }
+})
+
+io.on('connection', (socket)=>{
+  console.log(`A new with id: ${socket.id} user has joined`);
+  socket.on('message', (data)=>{
+    console.log(data, socket.id);
+    io.emit('broadcast', data);
+  })
+
+  socket.on('disconnect', ()=>{
+    console.log(`User: ${socket.id} has disconnected`);
+  })
+})
 
 
 
